@@ -1,0 +1,33 @@
+/////////////////////////////2.3 список
+let a = 1.0 in
+let b = 2.0 in
+let c = -3.0 in
+let D = b*b-4.*a*c in
+[(-b+sqrt(D))/(2.*a);(-b-sqrt(D))/(2.*a)];;
+//////////////////////////////////2.4 функция
+let solve (a, b, c, d) = 
+        sqrt((a - c)*(a - c) + (b - d)*(b - d));;
+let result = solve (1.0, 2.0, 3.0, 4.0) 
+printfn "%0.3f" result;;
+///////////////////////////////////2.5 каррирование
+let solve (a:float) b c d = 
+        sqrt((a - c)*(a - c) + (b - d)*(b - d));;
+let solve1 = solve 0.0;;
+let solve2 = solve1 0.0;;
+let result = solve2 2.0 2.0 
+printfn "%0.3f" result;;
+//////////////////////////////////2.6 условие
+let solve (a:float) b c d = 
+        if (a = c) && (b = d) then 0.0
+        else
+          sqrt((a - c)*(a - c) + (b - d)*(b - d));;
+let result = solve 1.0 2.0 3.0 4.0 
+printfn "%0.3f" result;;
+/////////////////////////////////3
+let solve a b c = 
+        if (a + c > b)&&(a + b > c)&&(b + c > a)  then 
+          if (a*a + c*c = b*b)||(a*a + b*b = c*c)||(b*b + c*c = a*a) then printfn "yes pryamoug"
+          else printfn "yes nepryamoug"
+        else printfn "no";;
+let solve1 = solve 3
+solve1 3 5;; 

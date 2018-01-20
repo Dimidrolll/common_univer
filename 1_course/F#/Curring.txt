@@ -1,0 +1,15 @@
+let give_me_money (salary_per_day:float) tax above_days days =
+
+  //salary_per_day  рублей в день (зарплата)
+
+  //tax             налог(в %)
+  
+//above_days      кол-во дней, отработанных сверх нормы (оплачиваются без учета налога)
+
+  //days            кол-во отработанных дней (оплачиваются с учетом налога)
+
+  salary_per_day * (days + above_days) - salary_per_day * days * tax / 100.0
+
+let curry_money = give_me_money 430.0 13.0  
+
+printfn "%0.2f" (curry_money 5.0 10.0)

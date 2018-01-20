@@ -1,0 +1,35 @@
+let k = 100//кол-во коров
+let u = 30//кг сена в день
+let v = 200//кг силоса в день
+let w = 5//кг комбикорма в день
+let s = 100 * 100//кг сена было (кол-во центнеров * 100кг)
+let t = 100 * 1000//кг силоса было(кол-во тонн * 1000 кг)
+let f = 100 * 50//кг комбикорма было(кол-во мешков * 50кг)
+let days potr bilo K = //на сколько дней хватит корма
+    bilo / K / potr
+let res_korm = //находим наименьшее из 3 - х
+    if (days u s k < days v t k) && (days u s k < days w f k) then 1
+        elif (days v t k < days u s k) && (days v t k < days w f k) then 2
+            elif (days w f k < days v t k) && (days w f k < days u s k) then 3
+                else 0
+let res_days = //находим наименьшее из 3 - х
+    if (days u s k < days v t k) && (days u s k < days w f k) then days u s k
+        elif (days v t k < days u s k) && (days v t k < days w f k) then days v t k
+            elif (days w f k < days v t k) && (days w f k < days u s k) then days w f k
+                else 0  
+printfn "%d" res_days//выводим результат
+printfn "%d" res_korm;; 
+/////////////////////////////////////////////////four (может как-то проще можно)
+let beg = (2, 57, 33)
+let enD = (5, 43, 12)  
+let time (h1,m1,s1) (h2,m2,s2) =       
+    if (s2 >= s1) && (m2 >= m1) then (h2 - h1, m2 - m1, s2 - s1)  
+        elif (s2 < s1) && (m2 > m1) then (h2 - h1, m2 - m1 - 1, s2 - s1 + 60) 
+            elif (s2 < s1) && (m2 = m1) then (h2 - h1 - 1, 59, s2 - s1 + 60) 
+                elif (s2 >= s1) && (m2 < m1) then (h2 - h1 - 1, m2 - m1 + 60, s2 - s1)
+                    elif (s2 < s1) && (m2 < m1) then (h2 - h1 - 1, m2 - m1 + 60 - 1, s2 - s1 + 60)
+                        else (0,0,0)
+let x1,x2,x3 =  time beg enD//(2, 59, 33) (5, 43, 12)
+printfn "%d" x1
+printfn "%d" x2
+printfn "%d" x3;;

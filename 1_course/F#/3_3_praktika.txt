@@ -1,0 +1,80 @@
+1 **************** сумма цифр
+
+let rec sol a =
+    if a = 0 then a
+        else a % 10 + sol (a/10);;
+let rez = sol 1234;; //вводим 11 параметр
+printfn "%d" rez;;
+
+2 **************** нод
+let rec nod a b =
+    if a % b = 0 then printfn "%d" b
+        elif b % a = 0 then printfn "%d" a
+           elif a > b then nod (a % b) b
+               else nod a (b % a);;
+nod 21 60;;//вводим  2 числа
+
+3 ****************
+let func q =
+    2 * q - 1;;
+let rec sol n p =
+    if n = 1 then p
+        else sol (n - 2) (p * n);;
+let m =
+    func 3;;//вводим 1 значение
+let c = sol m 1;; 
+printfn "%d" c;;
+
+4 ****************
+let rec sol i n a rez =
+    if i = n then rez
+        else sol (i + 1) n (a * (i + 1)) (rez + (a * (i + 1)));;
+let func m =    //тут вводим 1 параметр
+    sol 0 m 1 0;;
+let result = func 4
+printfn "%d" result;;
+
+5 ****************
+let rec sol i n a rez =
+    if i = n then rez
+        elif i % 2 = 0 then sol (i + 1) n (a * (i + 1)) (rez + (a * (i + 1)))
+            else sol (i + 1) n (a * (i + 1)) rez;;
+let result = sol 1 9 1 1 //тут не вводим параметры
+printfn "%d" result;;
+
+6 ****************
+
+let rec sol n =
+    if n < 2 then n
+        elif n % 2 = 1 then sol (n/2) * 10 + 1
+            else sol (n/2) * 10;;
+let rez = sol 122;; //вводим 1 параметр
+printfn "%d" rez;;
+
+7 ****************
+open System
+let rec game () =
+    let rec step x =
+        printf "ostalos "
+        printfn "%d" x
+        if x = 23 then printfn "comp takes 2"
+                       step (x - 2)
+            else
+                if x = 1 then printfn "comp wins"
+                    else
+                        printfn "enter the number"
+                        let n = int(Console.ReadLine())
+                        match n with
+                            |1 -> printfn "%d" (x - 1)
+                                  printfn "comp takes 3"
+                                  step (x - 4)
+                            |2 -> printfn "%d" (x - 2)
+                                  printfn "comp takes 2"
+                                  step (x - 4)
+                            |3 -> printfn "%d" (x - 3)
+                                  printfn "comp takes 1"
+                                  step (x - 4)
+                            |_ -> printfn "mistake"
+                                  step (x)         
+    step 23
+game();;

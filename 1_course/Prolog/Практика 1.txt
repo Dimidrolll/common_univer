@@ -1,0 +1,159 @@
+1 ****************
+predicates
+
+nondeterm студент(symbol,integer,integer,integer)
+nondeterm отличник(symbol)
+nondeterm двоечник(symbol)
+nondeterm математик(symbol)
+
+clauses
+студент(антонов,5,5,5).
+студент(бобров,4,3,2).
+студент(вяткин,4,5,5).
+студент(кротов,2,3,3).
+студент(соснин,4,4,4).
+
+отличник(Ф):- студент(Ф,5,5,5).
+двоечник(Ф):- студент(Ф,2,_,_) ; студент(Ф,_,2,_) ; студент(Ф,_,_,2).
+математик(Ф):-студент(Ф,L,K,_), L>3, K >3.
+
+goal
+%отличник(вяткин).
+%отличник(Q).
+%математик(соснин).
+%двоечник(Ч).
+%студент(Ч,_,_,2).
+математик(К).
+
+2 ****************
+predicates
+
+nondeterm мать(symbol,symbol)
+nondeterm сын(symbol,symbol)
+nondeterm дочь(symbol,symbol)
+nondeterm муж(symbol,symbol)
+nondeterm сестра(symbol,symbol)
+nondeterm брат(symbol,symbol)
+nondeterm отец(symbol,symbol)
+nondeterm жена(symbol,symbol)
+nondeterm пол(symbol,symbol)
+
+clauses
+отец(андрей, вера).
+отец(андрей, алексей).
+жена(ольга, андрей).
+пол(андрей, муж).
+пол(алексей, муж).
+пол(вера, жен).
+пол(ольга, жен).
+
+мать(Ф, И):- пол(Ф, жен), жена(Ф, Ч), отец(Ч, И).
+сын(Ф, И):- пол(Ф, муж), отец(И, Ф) ; мать(И, Ф).
+дочь(Ф, И):- пол(Ф, жен), отец(И, Ф) ; мать(И, Ф).
+муж(Ф, И):- жена(И, Ф).
+сестра(Ф, И):- пол(Ф, жен), мать(Ч, Ф), мать(Ч, И).
+брат(Ф, И):- пол(Ф, муж), мать(Ч, Ф), мать(Ч, И).
+
+goal
+%мать(ольга, андрей).
+муж(алексей, вера).
+
+3 ****************
+predicates
+
+nondeterm govern(symbol,integer,integer)
+nondeterm great(symbol,integer,integer)
+nondeterm person(symbol, integer)
+
+clauses
+govern(yar_mudr, 1019, 1054).
+govern(isy_first, 1054, 1077).
+govern(vsev_first, 1078, 1093).
+govern(svyt_second, 1092, 1112).
+govern(vladim_mono, 1113, 1125).
+govern(mstis_vel, 1125, 1132).
+
+person(X, Y):- govern(X, A, B), Y >= A, Y <= B.
+great(X, A, B):- govern(X, C, D), C > A, D < B ; person(X, A) ; person(X, B).
+
+goal
+%govern(S, 1050, 1080).
+%person(S, 1020).
+person(S, 1080).
+
+4 ****************
+predicates
+
+nondeterm reys(symbol,symbol)
+nondeterm avia2(symbol,symbol)
+nondeterm avia(symbol,symbol)
+
+clauses
+reys(a, b).
+reys(b, d).
+reys(b, c).
+reys(d, e).
+reys(e, f).
+
+avia2(X, Y):- reys(X, Z), reys(Z, Y), not(reys(X, Y)), not(reys(Y, X)).
+avia(X, Y):- not(avia2(X, Y)), reys(X, Z), reys(Z, T), reys(T, Y).
+
+goal
+avia2(X, Y).
+
+ИЛИ
+
+predicates
+nondeterm reys(symbol,symbol)
+nondeterm avia1(symbol,symbol)
+nondeterm avia2(symbol,symbol)
+nondeterm city(symbol)
+
+clauses
+reys(a, b).
+reys(b, d).
+reys(b, c).
+reys(d, e).
+reys(e, f).
+city(a).
+city(b).
+city(c).
+city(d).
+city(e).
+city(f).
+
+avia1(X, Y):- reys(X, Z), reys(Z, Y).
+avia2(X, Y):- city(X), city(Y), not(avia1(X, Y)), reys(X, Z), reys(Z, T), reys(T, Y).
+
+goal
+avia2(X, Y).
+
+5 ****************
+predicates
+nondeterm pull(symbol,symbol)
+nondeterm stand_before(symbol, symbol)
+nondeterm stand_after(symbol, symbol)
+nondeterm stand_before_1(symbol, symbol)
+nondeterm stand_after_1(symbol, symbol)
+nondeterm last(symbol)
+nondeterm vegetable(symbol)
+nondeterm midd_two(symbol, symbol, symbol)
+
+clauses
+pull(repka,ded). %кто-то вытянут кем-то
+pull(ded,babka).
+pull(babka,vnuchka).
+pull(vnuchka,zhuchka).
+pull(zhuchka,koshka).
+pull(koshka,mushka).
+
+stand_before(X, Y):- pull(X, Y).
+stand_after(X, Y):- pull(Y, X).
+stand_after_1(X, Y):- pull(X, Z), pull(Z, Y).
+stand_before_1(Y, X):- pull(X, Z), pull(Z, Y).
+last(X):- pull(_, X), not(pull(X, _)).
+vegetable(X):- pull(X, _), not(pull(_, X)).
+midd_two(X, Y, Z):- pull(X, Z), pull(Z, Y).
+
+goal
+last(X).
