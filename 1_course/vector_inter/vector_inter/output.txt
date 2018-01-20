@@ -1,0 +1,4 @@
+Bunin 3
+Gogol 3
+Morozov 2
+Simonov 6

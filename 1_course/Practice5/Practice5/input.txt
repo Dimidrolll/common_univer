@@ -1,0 +1,10 @@
+Toshich 233132 21.09.1222 Ford red 2000
+Petrov 242342 1.1.1111 Toyota black 3000
+Lomov 242343 2.2.2222 Gibhly baklajan 100
+Terov 565456 33.3.3333 Ford red 4500
+Moskvin 676756 23.4.1999 Ford red 3000
+Bunin 565646 54.7.2300 Nissan black 2700
+Mokov 787878 12.2.4000 Nissan blue 2001
+Gamov 454534 23.6.7777 Ford black 2012
+Bogatih 666566 32.5.5465 Ford blue 2000
+Puten 228228 1.04.0001 Volga black 1950

@@ -1,0 +1,14 @@
+**/Debug/**
+**/Release/**
+**/CMakeFiles/**
+*.sdf
+*.filters
+*.vcxproj
+*.ipch
+*.sln
+*.csproj
+*.iml
+**/.idea/**
+*.cmake
+*.cbp
+1_course/hromochlen/cmake-build-debug/Makefile
