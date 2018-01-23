@@ -12,3 +12,6 @@
 *.cmake
 *.cbp
 1_course/hromochlen/cmake-build-debug/Makefile
+*.config
+*.db
+*.settings
