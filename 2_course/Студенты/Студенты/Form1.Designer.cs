@@ -49,16 +49,19 @@
             this.следующийToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.студентToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.добавитьКотаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.foodText = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // prevBut
             // 
             this.prevBut.Enabled = false;
-            this.prevBut.Location = new System.Drawing.Point(167, 326);
+            this.prevBut.Location = new System.Drawing.Point(79, 280);
             this.prevBut.Name = "prevBut";
             this.prevBut.Size = new System.Drawing.Size(209, 72);
             this.prevBut.TabIndex = 0;
@@ -69,7 +72,7 @@
             // nextBut
             // 
             this.nextBut.Enabled = false;
-            this.nextBut.Location = new System.Drawing.Point(544, 326);
+            this.nextBut.Location = new System.Drawing.Point(335, 280);
             this.nextBut.Name = "nextBut";
             this.nextBut.Size = new System.Drawing.Size(209, 72);
             this.nextBut.TabIndex = 1;
@@ -80,7 +83,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(197, 107);
+            this.label1.Location = new System.Drawing.Point(88, 71);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 17);
             this.label1.TabIndex = 2;
@@ -89,7 +92,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(197, 181);
+            this.label2.Location = new System.Drawing.Point(88, 142);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 17);
             this.label2.TabIndex = 3;
@@ -98,7 +101,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(197, 259);
+            this.label3.Location = new System.Drawing.Point(88, 206);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 17);
             this.label3.TabIndex = 4;
@@ -107,7 +110,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(88, 455);
+            this.label4.Location = new System.Drawing.Point(88, 409);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(48, 17);
             this.label4.TabIndex = 5;
@@ -115,17 +118,24 @@
             // 
             // comboBox1
             // 
+            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.Enabled = false;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(184, 455);
+            this.comboBox1.Items.AddRange(new object[] {
+            "Фамилия",
+            "Имя",
+            "Факультет",
+            "Еда"});
+            this.comboBox1.Location = new System.Drawing.Point(91, 452);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(192, 24);
             this.comboBox1.TabIndex = 6;
+            this.comboBox1.SelectedValueChanged += new System.EventHandler(this.comboBox1_SelectedValueChanged);
             // 
             // surnameText
             // 
             this.surnameText.Enabled = false;
-            this.surnameText.Location = new System.Drawing.Point(335, 107);
+            this.surnameText.Location = new System.Drawing.Point(200, 68);
             this.surnameText.Name = "surnameText";
             this.surnameText.Size = new System.Drawing.Size(252, 22);
             this.surnameText.TabIndex = 7;
@@ -133,7 +143,7 @@
             // nameText
             // 
             this.nameText.Enabled = false;
-            this.nameText.Location = new System.Drawing.Point(335, 181);
+            this.nameText.Location = new System.Drawing.Point(200, 139);
             this.nameText.Name = "nameText";
             this.nameText.Size = new System.Drawing.Size(252, 22);
             this.nameText.TabIndex = 8;
@@ -141,7 +151,7 @@
             // facText
             // 
             this.facText.Enabled = false;
-            this.facText.Location = new System.Drawing.Point(335, 254);
+            this.facText.Location = new System.Drawing.Point(200, 203);
             this.facText.Name = "facText";
             this.facText.Size = new System.Drawing.Size(252, 22);
             this.facText.TabIndex = 9;
@@ -149,7 +159,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(436, 459);
+            this.label5.Location = new System.Drawing.Point(306, 455);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(16, 17);
             this.label5.TabIndex = 10;
@@ -158,10 +168,11 @@
             // searchText
             // 
             this.searchText.Enabled = false;
-            this.searchText.Location = new System.Drawing.Point(501, 456);
+            this.searchText.Location = new System.Drawing.Point(344, 452);
             this.searchText.Name = "searchText";
             this.searchText.Size = new System.Drawing.Size(252, 22);
             this.searchText.TabIndex = 11;
+            this.searchText.TextChanged += new System.EventHandler(this.searchText_TextChanged);
             // 
             // menuStrip1
             // 
@@ -188,14 +199,14 @@
             // открытьСписокToolStripMenuItem
             // 
             this.открытьСписокToolStripMenuItem.Name = "открытьСписокToolStripMenuItem";
-            this.открытьСписокToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.открытьСписокToolStripMenuItem.Size = new System.Drawing.Size(158, 26);
             this.открытьСписокToolStripMenuItem.Text = "Открыть";
             this.открытьСписокToolStripMenuItem.Click += new System.EventHandler(this.открытьСписокToolStripMenuItem_Click);
             // 
             // сохранитьToolStripMenuItem
             // 
             this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(158, 26);
             this.сохранитьToolStripMenuItem.Text = "Сохранить";
             this.сохранитьToolStripMenuItem.Click += new System.EventHandler(this.сохранитьToolStripMenuItem_Click);
             // 
@@ -212,7 +223,7 @@
             // 
             this.предыдущийToolStripMenuItem.Enabled = false;
             this.предыдущийToolStripMenuItem.Name = "предыдущийToolStripMenuItem";
-            this.предыдущийToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.предыдущийToolStripMenuItem.Size = new System.Drawing.Size(176, 26);
             this.предыдущийToolStripMenuItem.Text = "Предыдущий";
             this.предыдущийToolStripMenuItem.Click += new System.EventHandler(this.предыдущийToolStripMenuItem_Click);
             // 
@@ -220,7 +231,7 @@
             // 
             this.следующийToolStripMenuItem.Enabled = false;
             this.следующийToolStripMenuItem.Name = "следующийToolStripMenuItem";
-            this.следующийToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.следующийToolStripMenuItem.Size = new System.Drawing.Size(176, 26);
             this.следующийToolStripMenuItem.Text = "Следующий";
             this.следующийToolStripMenuItem.Click += new System.EventHandler(this.следующийToolStripMenuItem_Click);
             // 
@@ -228,6 +239,7 @@
             // 
             this.студентToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьToolStripMenuItem,
+            this.добавитьКотаToolStripMenuItem,
             this.удалитьToolStripMenuItem});
             this.студентToolStripMenuItem1.Name = "студентToolStripMenuItem1";
             this.студентToolStripMenuItem1.Size = new System.Drawing.Size(74, 24);
@@ -236,15 +248,22 @@
             // добавитьToolStripMenuItem
             // 
             this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(185, 26);
             this.добавитьToolStripMenuItem.Text = "Добавить";
             this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.добавитьToolStripMenuItem_Click);
+            // 
+            // добавитьКотаToolStripMenuItem
+            // 
+            this.добавитьКотаToolStripMenuItem.Name = "добавитьКотаToolStripMenuItem";
+            this.добавитьКотаToolStripMenuItem.Size = new System.Drawing.Size(185, 26);
+            this.добавитьКотаToolStripMenuItem.Text = "Добавить кота";
+            this.добавитьКотаToolStripMenuItem.Click += new System.EventHandler(this.добавитьКотаToolStripMenuItem_Click);
             // 
             // удалитьToolStripMenuItem
             // 
             this.удалитьToolStripMenuItem.Enabled = false;
             this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(185, 26);
             this.удалитьToolStripMenuItem.Text = "Удалить";
             this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
             // 
@@ -256,11 +275,30 @@
             // 
             this.saveFileDialog1.Filter = "(*.xml)|*.xml";
             // 
+            // foodText
+            // 
+            this.foodText.Enabled = false;
+            this.foodText.Location = new System.Drawing.Point(567, 139);
+            this.foodText.Name = "foodText";
+            this.foodText.Size = new System.Drawing.Size(252, 22);
+            this.foodText.TabIndex = 13;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(564, 106);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(196, 17);
+            this.label6.TabIndex = 14;
+            this.label6.Text = "Любимая еда студента-кота";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(914, 524);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.foodText);
             this.Controls.Add(this.searchText);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.facText);
@@ -276,6 +314,7 @@
             this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MainMenuStrip = this.menuStrip1;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "Студенты";
             this.menuStrip1.ResumeLayout(false);
@@ -311,6 +350,9 @@
         private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.TextBox foodText;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ToolStripMenuItem добавитьКотаToolStripMenuItem;
     }
 }
 
