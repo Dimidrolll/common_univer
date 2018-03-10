@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Студенты.model;
 
 namespace Студенты
 {
@@ -21,7 +23,61 @@ namespace Студенты
         {
             InitializeComponent();
             iter = new ListIterator(students);
+
+            HashSet<Item> hashSet = new HashSet<Item>(Item.ValueComparer);
+
+            addProperties(hashSet, typeof(Student));
+            addProperties(hashSet, typeof(StudentCat));
+
+            foreach (var item in hashSet)
+            {
+                comboBox1.Items.Add(item);
+            }
+
+            
             comboBox1.SelectedIndex = 0;
+        }
+
+        private void addProperties(HashSet<Item> hashSet, Type type)
+        {
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                var attributes = propertyInfo.GetCustomAttributes(typeof(RusName), true);
+                foreach (var attribute in attributes)
+                {
+                    var rusName = attribute as RusName;
+                    if (rusName != null)
+                    {
+                        var item = new Item { Name = rusName.GetRusName(), Value = propertyInfo.Name };
+                        hashSet.Add(item);
+                    }
+                }
+            }
+        }
+
+        class Item
+        {
+            public string Name { get; set; }
+            public string Value { get; set; }
+
+            private sealed class ValueEqualityComparer : IEqualityComparer<Item>
+            {
+                public bool Equals(Item x, Item y)
+                {
+                    if (ReferenceEquals(x, y)) return true;
+                    if (ReferenceEquals(x, null)) return false;
+                    if (ReferenceEquals(y, null)) return false;
+                    if (x.GetType() != y.GetType()) return false;
+                    return string.Equals(x.Value, y.Value);
+                }
+
+                public int GetHashCode(Item obj)
+                {
+                    return (obj.Value != null ? obj.Value.GetHashCode() : 0);
+                }
+            }
+
+            public static IEqualityComparer<Item> ValueComparer { get; } = new ValueEqualityComparer();
         }
 
         private void открытьСписокToolStripMenuItem_Click(object sender, EventArgs e)
@@ -191,63 +247,30 @@ namespace Студенты
 
         private void Search()
         {
+            var filterItem = comboBox1.SelectedItem as Item;
+            if (filterItem == null)
+            {
+                return;
+            }
+
             ListIterator copyIter = iter.Copy();
             while (copyIter.HasNext())
             {
                 Student student = copyIter.Next();
-                foreach (var property in student.GetType().GetProperties())
+                var propertyToSearchIn = student.GetType().GetProperty(filterItem.Value);
+                if (propertyToSearchIn == null)
                 {
-                    if (comboBox1.SelectedItem.ToString() == "Фамилия" && property.Name == "Surname")
-                    {
-                        if (searchText.Text == student.Surname)
-                        {
-                            iter = copyIter;
-                            ShowSt();
-                            Blocked();
-                            return;
-                        }
-                    }
-
-                    if (comboBox1.SelectedItem.ToString() == "Имя" && property.Name == "Name")
-                    {
-                        if (searchText.Text == student.Name)
-                        {
-                            iter = copyIter;
-                            ShowSt();
-                            Blocked();
-                            return;
-                        }
-                    }
-
-                    if (comboBox1.SelectedItem.ToString() == "Факультет" && property.Name == "Faculty")
-                    {
-                        if (searchText.Text == student.Faculty)
-                        {
-                            iter = copyIter;
-                            ShowSt();
-                            Blocked();
-                            return;
-                        }
-                    }
-
-                    if (comboBox1.SelectedItem.ToString() == "Еда" && property.Name == "Food")
-                    {
-                        if (searchText.Text == ((StudentCat) student).Food)
-                        {
-                            iter = copyIter;
-                            ShowSt();
-                            Blocked();
-                            return;
-                        }
-                    }
-
-
+                    continue;
                 }
-
-         
+                string value = propertyToSearchIn.GetValue(student) as string;
+                if (searchText.Text == value)
+                {
+                    iter = copyIter;
+                    ShowSt();
+                    Blocked();
+                    return;
+                }
             } 
-
-
         }
 
         private void searchText_TextChanged(object sender, EventArgs e)
@@ -262,33 +285,7 @@ namespace Студенты
         }
     }
 
-    [Serializable]
-    [XmlInclude(typeof(StudentCat))]
-    public class Student
-    {
-        public string Surname { get; set; }
-        public string Name { get; set; }
-        public string Faculty { get; set; }
+    
 
-        public Student()
-        {
-            Surname = "";
-            Name = "";
-            Faculty = "";
-        }
-
-    }
-
-    public class StudentCat : Student
-    {
-        public string Food { get; set; }
-
-        public StudentCat()
-        {
-            Surname = "";
-            Name = "";
-            Faculty = "";
-            Food = "";
-        }
-    }
+    
 }
