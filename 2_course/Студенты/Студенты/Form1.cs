@@ -15,12 +15,13 @@ namespace Студенты
     public partial class Form1 : Form
     {
         public List<Student> students = new List<Student>();
-        public int curSt = -1;
+        public ListIterator iter;
 
         public Form1()
         {
             InitializeComponent();
-            //Blocked();
+            iter = new ListIterator(students);
+            comboBox1.SelectedIndex = 0;
         }
 
         private void открытьСписокToolStripMenuItem_Click(object sender, EventArgs e)
@@ -34,21 +35,17 @@ namespace Студенты
                 try
                 {
                     students = (List<Student>) xs.Deserialize(fs);
+                    iter = new ListIterator(students);
+                    if (iter.HasNext())
+                    {
+                        iter.Next();
+                    }
+                    Blocked();
+                    ShowSt();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message);
-                    return;
-                }
-                if (students.Count != 0)
-                {
-                    curSt = 0;
-                }
-
-                Blocked();
-                if (curSt != -1)
-                {
-                    ShowSt();
                 }
             }
         }
@@ -68,11 +65,7 @@ namespace Студенты
 
         private void добавитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            students.Add(new Student() {Surname = "", Name = "", Faculty = ""});
-            if (curSt == -1)
-            {
-                ++curSt;
-            }
+            iter.Add(new Student());
 
             Change();
             ShowSt();
@@ -81,12 +74,8 @@ namespace Студенты
 
         private void добавитьКотаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            students.Add(new StudentCat() {Surname = "", Name = "", Faculty = "", Food = ""});
-            if (curSt == -1)
-            {
-                ++curSt;
-            }
-
+            iter.Add(new StudentCat());
+            
             Change();
             ShowSt();
             Blocked();
@@ -94,17 +83,14 @@ namespace Студенты
 
         private void удалитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            students.Remove(students[curSt]);
-            if (curSt == students.Count) --curSt;
+            iter.Remove();
             ShowSt();
             Blocked();
         }
 
         private void Blocked()
         {
-            //if (students == null)
-            //return;
-            if (curSt == -1)
+            if (iter.IsEmpty())
             {
                 удалитьToolStripMenuItem.Enabled = false;
                 surnameText.Enabled = false;
@@ -130,50 +116,27 @@ namespace Студенты
                 предыдущийToolStripMenuItem.Enabled = true;
                 следующийToolStripMenuItem.Enabled = true;
                 comboBox1.Enabled = true;
+                foodText.Enabled = iter.Current.GetType() == typeof(StudentCat);
             }
 
-            if (students[curSt].GetType() == typeof(StudentCat))
-            {
-                foodText.Enabled = true;
-            }
-            else
-            {
-                foodText.Enabled = false;
-            }
+            
+            предыдущийToolStripMenuItem.Enabled = iter.HasPrevious();
+            prevBut.Enabled = iter.HasPrevious();
 
-            if (curSt == 0 || curSt == -1)
-            {
-                предыдущийToolStripMenuItem.Enabled = false;
-                prevBut.Enabled = false;
-            }
-            else
-            {
-                предыдущийToolStripMenuItem.Enabled = true;
-                prevBut.Enabled = true;
-            }
-
-            if (curSt == students.Count - 1)
-            {
-                следующийToolStripMenuItem.Enabled = false;
-                nextBut.Enabled = false;
-            }
-            else
-            {
-                следующийToolStripMenuItem.Enabled = true;
-                nextBut.Enabled = true;
-            }
+            следующийToolStripMenuItem.Enabled = iter.HasNext();
+            nextBut.Enabled = iter.HasNext();
         }
 
         private void ShowSt()
         {
-            if (curSt != -1)
+            if (!iter.IsEmpty())
             {
-                surnameText.Text = students[curSt].Surname;
-                nameText.Text = students[curSt].Name;
-                facText.Text = students[curSt].Faculty;
-                if (students[curSt] is StudentCat)
+                surnameText.Text = iter.Current.Surname;
+                nameText.Text = iter.Current.Name;
+                facText.Text = iter.Current.Faculty;
+                if (iter.Current is StudentCat)
                 {
-                    foodText.Text = ((StudentCat) students[curSt]).Food;
+                    foodText.Text = ((StudentCat) iter.Current).Food;
                 }
                 else
                 {
@@ -191,19 +154,19 @@ namespace Студенты
 
         private void Change()
         {
-            students[curSt].Surname = surnameText.Text;
-            students[curSt].Name = nameText.Text;
-            students[curSt].Faculty = facText.Text;
-            if (students[curSt].GetType() == typeof(StudentCat))
+            iter.Current.Surname = surnameText.Text;
+            iter.Current.Name = nameText.Text;
+            iter.Current.Faculty = facText.Text;
+            if (iter.Current.GetType() == typeof(StudentCat))
             {
-                ((StudentCat) students[curSt]).Food = foodText.Text;
+                ((StudentCat)iter.Current).Food = foodText.Text;
             }
         }
 
         private void предыдущийToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Change();
-            --curSt;
+            iter.Previous();
             ShowSt();
             Blocked();
         }
@@ -211,38 +174,34 @@ namespace Студенты
         private void следующийToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Change();
-            ++curSt;
+            iter.Next();
             ShowSt();
             Blocked();
         }
 
         private void prevBut_Click(object sender, EventArgs e)
         {
-            Change();
-            --curSt;
-            ShowSt();
-            Blocked();
+            предыдущийToolStripMenuItem_Click(sender, e);
         }
 
         private void nextBut_Click(object sender, EventArgs e)
         {
-            Change();
-            ++curSt;
-            ShowSt();
-            Blocked();
+            следующийToolStripMenuItem_Click(sender,e);
         }
 
         private void Search()
         {
-            for (int i = 0; i < students.Count; i++)
+            ListIterator copyIter = iter.Copy();
+            while (copyIter.HasNext())
             {
-                foreach (var property in students[i].GetType().GetProperties())
+                Student student = copyIter.Next();
+                foreach (var property in student.GetType().GetProperties())
                 {
                     if (comboBox1.SelectedItem.ToString() == "Фамилия" && property.Name == "Surname")
                     {
-                        if (searchText.Text == students[i].Surname)
+                        if (searchText.Text == student.Surname)
                         {
-                            curSt = i;
+                            iter = copyIter;
                             ShowSt();
                             Blocked();
                             return;
@@ -251,9 +210,9 @@ namespace Студенты
 
                     if (comboBox1.SelectedItem.ToString() == "Имя" && property.Name == "Name")
                     {
-                        if (searchText.Text == students[i].Name)
+                        if (searchText.Text == student.Name)
                         {
-                            curSt = i;
+                            iter = copyIter;
                             ShowSt();
                             Blocked();
                             return;
@@ -262,9 +221,9 @@ namespace Студенты
 
                     if (comboBox1.SelectedItem.ToString() == "Факультет" && property.Name == "Faculty")
                     {
-                        if (searchText.Text == students[i].Faculty)
+                        if (searchText.Text == student.Faculty)
                         {
-                            curSt = i;
+                            iter = copyIter;
                             ShowSt();
                             Blocked();
                             return;
@@ -273,17 +232,22 @@ namespace Студенты
 
                     if (comboBox1.SelectedItem.ToString() == "Еда" && property.Name == "Food")
                     {
-                        if (searchText.Text == ((StudentCat)students[i]).Food)
+                        if (searchText.Text == ((StudentCat) student).Food)
                         {
-                            curSt = i;
+                            iter = copyIter;
                             ShowSt();
                             Blocked();
                             return;
                         }
                     }
 
+
                 }
-            }
+
+         
+            } 
+
+
         }
 
         private void searchText_TextChanged(object sender, EventArgs e)
@@ -308,7 +272,11 @@ namespace Студенты
 
         public Student()
         {
+            Surname = "";
+            Name = "";
+            Faculty = "";
         }
+
     }
 
     public class StudentCat : Student
@@ -317,6 +285,10 @@ namespace Студенты
 
         public StudentCat()
         {
+            Surname = "";
+            Name = "";
+            Faculty = "";
+            Food = "";
         }
     }
 }
